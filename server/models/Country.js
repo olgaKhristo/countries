@@ -1,4 +1,4 @@
-// start here to write function (model) then go comtroller
+// start here to write function (model) then go to controller
 const db = require("../database/connect");
 
 class Country{
@@ -41,6 +41,18 @@ static async create(data){
 async  destroy(req, res){
     let response = await db.query('DELETE FROM country WHERE name = $1 RETURNING *;', [this.name]);
     return new Country(response.rows[0]);
+
+}
+//add  PATCH route that updates a country's details
+async update(data){
+    const { capital, population, languages} = data;
+    let response = await db.query('UPDATE country SET  capital = $1, population = $2, languages = $3 WHERE name = $4 RETURNING *;', [capital, population, languages, this.name]);
+    const countryName = response.rows[0].name;
+    const updatedCountry = await Country.getOneByCountryName(countryName);
+    if(response.rows.length != 1){
+        throw new Error('Unable to update country');
+    }
+    return new Country(updatedCountry);
 
 }
 }

@@ -1,11 +1,13 @@
+const City = require("../models/City");
+
 // do this second after models. for step 3 go to routes
 
-const Country = require('../models/Country');
+
 
 const index = async (req, res) => {
     try{
-        const countries = await Country.getAll();
-        res.status(200).json(countries);
+        const city = await City.getAllNames();
+        res.status(200).json(city);
 
     }catch(err){
         res.status(500).json({error: err.message});
@@ -17,10 +19,10 @@ const show = async (req, res) => {
         //get name
         const name = req.params.name.toLowerCase();
 
-        //get country 
-        const country = await Country.getOneByCountryName(name);
+        //get city 
+        const city = await City.getOneByName(name);
         //return the response
-        res.status(200).json(country);
+        res.status(200).json(city);
 
     }catch(err){
         res.status(404).json({error: err.message});
@@ -31,8 +33,8 @@ const show = async (req, res) => {
 const  create = async (req, res) => {
     try{
         const data = req.body;
-        const newCountry = await Country.create(data);
-        res.status(201).json(newCountry);
+        const newCity = await City.create(data);
+        res.status(201).json(newCity);
     }catch(err){
         res.status(400).json({error: err.message});
     }
@@ -41,8 +43,8 @@ const  create = async (req, res) => {
 const destroy = async (req, res) => {
     try{
         const name = req.params.name.toLowerCase();
-        const country = await Country.getOneByCountryName(name);
-        const deletedCountry = await country.destroy(); //deletedCountry is  = result
+        const city = await City.getOneByName(name);
+        const deletedCity = await city.destroy(); //deletedCity is  = result
         res.status(200).end();
       
     }catch(err){ 
@@ -53,12 +55,12 @@ const destroy = async (req, res) => {
 const update = async (req, res) => {
     try{
         const name = req.params.name.toLowerCase();
-        const country = await Country.getOneByCountryName(name);
-        req.body.capital ||= country.capital;
-        req.body.population ||= country.population;
-        req.body.languages ||= country.languages;
-        const updatedCountry = await country.update(req.body);
-        res.status(200).json(updatedCountry);
+        const city = await City.getOneByName(name);
+        req.body.country_id ||= city.country_id;
+        req.body.population ||= city.population;
+       
+        const updatedCity = await city.update(req.body);
+        res.status(200).json(updatedCity);
     }catch(err){
         res.status(400).json({error: err.message});
     }

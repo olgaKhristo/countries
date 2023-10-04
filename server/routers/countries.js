@@ -8,5 +8,6 @@ countryRouter.get('/', cc.index);
 countryRouter.get('/:name', cc.show);
 countryRouter.post('/', cc.create);
 countryRouter.delete('/:name', cc.destroy);
+countryRouter.patch('/:name', cc.update);
 
 module.exports = countryRouter;
